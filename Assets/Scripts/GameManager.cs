@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +11,9 @@ public class GameManager : MonoBehaviour
 
     private const int BOARD_SIZE = 10;
 
-    private Slot[,] gameSlots;
+    public int GetBoardSize() => BOARD_SIZE;
+
+    public Slot[,] gameSlots;
 
     [SerializeField] private Block grabBlock;
     [SerializeField] private Block targetBlock;
@@ -39,7 +40,7 @@ public class GameManager : MonoBehaviour
         {
             for(int j = 0; j < BOARD_SIZE; j++)
             {
-                Vector2 spawnPos = new Vector2((float)j / 2 + 0.5f, (float)i / 2 + 0.5f);
+                Vector2 spawnPos = new Vector2(i, j);
                 GameObject spawnObj = Instantiate(slotPrefab, transform);
                 spawnObj.transform.localPosition = spawnPos;
 
