@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     private const int BOARD_SIZE = 10;
 
-    [SerializeField] private List<Slot> gameSlots = new List<Slot>();
+    private Slot[,] gameSlots;
 
     [SerializeField] private Block grabBlock;
     [SerializeField] private Block targetBlock;
@@ -20,8 +20,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         blockSprites = Resources.LoadAll<Sprite>("Sprites/Block");
-
         slotPrefab = Resources.Load<GameObject>("Prefabs/Slot");
+
+        gameSlots = new Slot[BOARD_SIZE, BOARD_SIZE];
 
         CreateGameBoard();
     }
@@ -42,7 +43,7 @@ public class GameManager : MonoBehaviour
                 GameObject spawnObj = Instantiate(slotPrefab, transform);
                 spawnObj.transform.localPosition = spawnPos;
 
-                gameSlots.Add(spawnObj.GetComponent<Slot>());  
+                gameSlots[i,j] = spawnObj.GetComponent<Slot>();
             }
         }
     }
