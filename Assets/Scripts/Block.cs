@@ -70,8 +70,13 @@ public class Block : MonoBehaviour
             }
         }
 
+        targetBlock = board.gameSlots[(int)destPos.x, (int)destPos.y].GetComponentInChildren<Block>();
+        targetBlock.transform.parent = transform.parent;
         transform.parent = board.gameSlots[(int)destPos.x, (int)destPos.y].transform;
+
         transform.localPosition = Vector3.zero;
+        targetBlock.transform.localPosition = Vector3.zero;
+
         originPos = transform.parent.localPosition;
     }
 
