@@ -74,14 +74,31 @@ public class Block : MonoBehaviour
         targetBlock.transform.parent = transform.parent;
         transform.parent = board.gameSlots[(int)destPos.x, (int)destPos.y].transform;
 
-        transform.localPosition = Vector3.zero;
-        targetBlock.transform.localPosition = Vector3.zero;
+        StartCoroutine(CMove());
 
         originPos = transform.parent.localPosition;
     }
 
-    private void Move()
+    private IEnumerator CMove()
     {
-        
+        float timer = 0f;
+
+        while(true)
+        {
+            yield return null;
+
+            transform.localPosition = Vector2.Lerp(transform.localPosition, Vector2.zero, .4f);
+            targetBlock.transform.localPosition = Vector2.Lerp(targetBlock.transform.localPosition, Vector2.zero, .4f);
+
+            timer += Time.deltaTime;
+
+            if(timer >= 1f)
+            {
+                transform.localPosition = Vector3.zero;
+                targetBlock.transform.localPosition = Vector3.zero;
+
+                yield break;
+            }
+        }
     }
 }
