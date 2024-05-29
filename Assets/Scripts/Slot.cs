@@ -3,16 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BlockType
-{
-    BEAR, CAT, DEER, DOG, DUCK, FROG, MOUSE, PANDA, PIG, RABBIT, NONE
-}
 
 public class Slot : MonoBehaviour
 {
     private GameObject blockPrefab;
-    private SpriteRenderer blockRender;
-    private BlockType blockType = BlockType.NONE;
 
     private void Start()
     {
@@ -31,10 +25,5 @@ public class Slot : MonoBehaviour
 
         GameObject spawnBlock = Instantiate(blockPrefab, transform);
         spawnBlock.transform.localPosition = Vector3.zero;
-
-        blockRender = spawnBlock.GetComponent<SpriteRenderer>();
-
-        blockType = (BlockType)UnityEngine.Random.Range(0, Enum.GetValues(typeof(BlockType)).Length - 1);
-        blockRender.sprite = GameManager.blockSprites[(int)blockType];
     }
 }

@@ -1,7 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
+public enum BlockType
+{
+    BEAR, CAT, DEER, DOG, DUCK, FROG, MOUSE, PANDA, PIG, RABBIT, NONE
+}
 
 public class Block : MonoBehaviour
 {
@@ -14,11 +20,23 @@ public class Block : MonoBehaviour
     private Block targetBlock;
     private GameManager board;
 
+    public bool isMatched = false;
+
+    private SpriteRenderer blockRender;
+    private BlockType blockType = BlockType.NONE;
+
+    public BlockType GetBlockType() => blockType;
+
     private void Start()
     {
         originPos = transform.parent.localPosition;
 
         board = FindObjectOfType<GameManager>();
+
+        blockRender = GetComponent<SpriteRenderer>();
+
+        blockType = (BlockType)UnityEngine.Random.Range(0, Enum.GetValues(typeof(BlockType)).Length - 1);
+        blockRender.sprite = GameManager.blockSprites[(int)blockType];
     }
 
     private void OnMouseDown()
@@ -98,6 +116,45 @@ public class Block : MonoBehaviour
                 targetBlock.transform.localPosition = Vector3.zero;
 
                 yield break;
+            }
+        }
+    }
+
+    private void Update()
+    {
+        FindMatched();
+
+        if(isMatched)
+        {
+            blockRender.color = Color.black;
+        }
+    }
+
+    private void FindMatched()
+    {
+        if(0 < originPos.x && originPos.x < board.GetBoardSize() - 1)
+        {
+            Block leftBlock = board.gameSlots[(int)originPos.x - 1, (int)originPos.y].GetComponentInChildren<Block>();
+            Block rightBlock = board.gameSlots[(int)originPos.x + 1, (int)originPos.y].GetComponentInChildren<Block>();
+
+            if (leftBlock.GetBlockType() == this.GetBlockType() && rightBlock.GetBlockType() == this.GetBlockType())
+            {
+                leftBlock.isMatched = true;
+                rightBlock.isMatched = true;
+                isMatched = true;
+            }
+        }
+
+        if(0 < originPos.y && originPos.y < board.GetBoardSize() - 1)
+        {
+            Block downBlock = board.gameSlots[(int)originPos.x, (int)originPos.y - 1].GetComponentInChildren<Block>();
+            Block upBlock = board.gameSlots[(int)originPos.x, (int)originPos.y + 1].GetComponentInChildren<Block>();
+
+            if (downBlock.GetBlockType() == this.GetBlockType() && upBlock.GetBlockType() == this.GetBlockType())
+            {
+                downBlock.isMatched = true;
+                upBlock.isMatched = true;
+                isMatched = true;
             }
         }
     }
